@@ -1,5 +1,6 @@
 import Alternativa.RepositorioArrayList;
 import modelo.Avenger;
+import modelo.CalculadoraPagos;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -29,9 +30,14 @@ public class Ventana {
     private JSpinner spinPagoModificar;
     private JButton btnModificar;
     private JLabel lblSeleccionado;
+    private JTextArea textArea2;
+    private JButton btnInforme;
+    private JButton BUSCARButton;
+    private JTextField textField1;
     private JButton mostrarButton;
     RepositorioArrayList repo = new RepositorioArrayList();
     Avenger aux;
+    CalculadoraPagos calculadora = new CalculadoraPagos();
 
     public Ventana() {
         SpinnerNumberModel modelo1 = new SpinnerNumberModel(1, 1, 5, 1);
@@ -120,6 +126,41 @@ public class Ventana {
                 aux = null;
                 lblSeleccionado.setText("");
             }
+        });
+        btnInforme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                StringBuilder sb = new StringBuilder();
+                for(Avenger avenger : repo.listar()) {
+                    double pago = calculadora.calcularAporteFondo(avenger.getPagoMensual());
+                    double impuesto = calculadora.calcularImpuestoMensual(avenger.getPagoMensual());
+                    double impuestoAnual = calculadora.calcularImpuestoAnual(avenger.getPagoAnual());
+                    double pagoNeto = calculadora.calcularPagoNetoMensual(avenger);
+                    sb.append(String.format("ID: %s | Nombre: %s| Aporte Fondo: %.2f| Impuesto Mensual: %.2f| Impuesto Anual: %.2f| Pago Neto: %.2f%n", avenger.getId(), avenger.getNombre(), pago, impuesto, impuestoAnual, pagoNeto));
+                }
+                textArea2.setText(sb.toString());
+            }
+        });
+        BUSCARButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String id = textField1.getText();
+                if(id.isEmpty()) {
+                    JOptionPane.showMessageDialog(Principal, "Por favor, ingrese un ID para buscar.");
+                    return;
+                }
+                Avenger avenger = repo.buscarPorId(id).orElse(null);
+                if (avenger != null) {
+                    double pago = calculadora.calcularAporteFondo(avenger.getPagoMensual());
+                    double impuesto = calculadora.calcularImpuestoMensual(avenger.getPagoMensual());
+                    double impuestoAnual = calculadora.calcularImpuestoAnual(avenger.getPagoAnual());
+                    double pagoNeto = calculadora.calcularPagoNetoMensual(avenger);
+                    textArea2.setText(String.format("ID: %s | Nombre: %s| Aporte Fondo: %.2f| Impuesto: %.2f| Impuesto Anual: %.2f| Pago Neto: %.2f%n", avenger.getId(), avenger.getNombre(), pago, impuesto, impuestoAnual, pagoNeto));
+                } else {
+                    textArea2.setText("Avenger no encontrado.");
+                }
+
+        }
         });
     }
 
