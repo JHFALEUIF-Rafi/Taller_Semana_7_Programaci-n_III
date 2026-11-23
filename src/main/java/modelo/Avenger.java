@@ -7,7 +7,7 @@ public class Avenger {
     public static final int PELIGROSIDAD_MIN = 1;
     public static final int PELIGROSIDAD_MAX = 5;
 
-    private final String id;      // identificador único, no se modifica
+    private final String id;
     private String nombre;
     private String mision;
     private int peligro;     // 1 a 5
@@ -41,7 +41,6 @@ public class Avenger {
         return pagoMensual;
     }
 
-    /** Pago anual = pago mensual x 12 (base para el impuesto). */
     public double getPagoAnual() {
         return pagoMensual * 12;
     }
@@ -77,7 +76,6 @@ public class Avenger {
         return valor.trim();
     }
 
-    /** Dos Avengers son iguales si tienen el mismo ID. Necesario para HashMap/HashSet. */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
