@@ -63,7 +63,6 @@ public class Ventana {
 
                 Avenger avenger = new Avenger(id, nombre, mision, peligro, pagoMensual);
                 boolean registrado = repo.registrar(avenger);
-                aux = avenger;
                 if (registrado) {
                     JOptionPane.showMessageDialog(Principal, "Avenger registrado exitosamente.");
                 } else {
